@@ -7,48 +7,34 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SecurityHelper {
     public static String extensionToRole(String ext) {
         return "ROLE_EXT_" + ext.toUpperCase();
     }
 
-    public static List<String> getAllowedExtensions(List<String> exts) {
-        List<String> extensions = new ArrayList<>();
-
-        UserDetails userDetails = getUserDetails();
-        if (userDetails != null) {
-            Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>)userDetails.getAuthorities();
-
-            for (String ext : exts) {
-                if (isRolePresent(authorities, extensionToRole(ext))) {
-                    extensions.add(ext);
-                }
-            }
+    public static String roleToExtension(String role) {
+        if (!role.startsWith("ROLE_EXT_")) {
+            return null;
         }
 
-        return extensions;
+        return role.substring("ROLE_EXT_".length()).toLowerCase();
+    }
+
+    public static List<String> modifyExtensionRoles(List<String> roles, List<String> extensions) {
+        List<String> newRoles = roles.stream().filter(role -> !role.startsWith("ROLE_EXT_")).collect(Collectors.toList());
+
+        for (String ext : extensions) {
+            newRoles.add(extensionToRole(ext));
+        }
+
+        return newRoles;
     }
 
     public static final boolean hasRole(String role) {
-        boolean hasRole = false;
-        UserDetails userDetails = getUserDetails();
-        if (userDetails != null) {
-            Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>)userDetails.getAuthorities();
-            if (isRolePresent(authorities, role)) {
-                hasRole = true;
-            }
-        }
-        return hasRole;
-    }
-
-    protected static UserDetails getUserDetails() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = null;
-        if (principal instanceof UserDetails) {
-            userDetails = (UserDetails) principal;
-        }
-        return userDetails;
+        Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>)SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        return isRolePresent(authorities, role);
     }
 
     private static boolean isRolePresent(Collection<GrantedAuthority> authorities, String role) {

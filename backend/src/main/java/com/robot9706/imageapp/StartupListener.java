@@ -32,7 +32,7 @@ public class StartupListener implements ApplicationListener<ApplicationReadyEven
             AppUser rootUser = new AppUser();
             rootUser.setUsername("root");
             rootUser.setPassword("root");
-            rootUser.setRoles(Arrays.asList(new String[]{ "ADMIN", "USER" }));
+            rootUser.setRoles(Arrays.asList(new String[]{ "ADMIN" }));
             userService.saveNewUser(rootUser);
         }
 

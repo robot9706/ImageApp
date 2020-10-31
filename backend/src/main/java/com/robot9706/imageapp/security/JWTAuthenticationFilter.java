@@ -61,10 +61,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication auth) throws IOException, ServletException {
 
         String uname = ((User) auth.getPrincipal()).getUsername();
+        AppUser appUser = this.userService.findUserByUserName(uname);
         String[] authorities = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).toArray(String[]::new);
 
         String token = JWT.create()
-                .withSubject(((User) auth.getPrincipal()).getUsername())
+                //.withSubject(((User) auth.getPrincipal()).getUsername())
+                .withSubject(appUser.getId().toString())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .withArrayClaim(ROLES_CONST, authorities)
                 .sign(HMAC512(SECRET.getBytes()));

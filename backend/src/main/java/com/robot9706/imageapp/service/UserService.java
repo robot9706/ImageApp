@@ -3,6 +3,7 @@ package com.robot9706.imageapp.service;
 import com.auth0.jwt.interfaces.Claim;
 import com.robot9706.imageapp.dto.AppUser;
 import com.robot9706.imageapp.repository.UserMongoRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -45,7 +47,23 @@ public class UserService implements UserDetailsService {
         userMongoRepository.save(user);
     }
 
+    public void updateUser(AppUser user) {
+        userMongoRepository.save(user);
+    }
+
     public AppUser findUserByUserName(String username) {
         return userMongoRepository.findApplicationUserByUsername(username);
+    }
+
+    public AppUser findUserById(String id) {
+        return userMongoRepository.findApplicationUserById(new ObjectId(id));
+    }
+
+    public AppUser findUserById(ObjectId id) {
+        return userMongoRepository.findApplicationUserById(id);
+    }
+
+    public List<AppUser> getAllUsers() {
+        return userMongoRepository.findUsers();
     }
 }
