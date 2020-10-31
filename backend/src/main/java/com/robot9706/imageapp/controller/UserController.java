@@ -29,7 +29,7 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_LOL')")
     @GetMapping("/test")
     public String test() {
         return "A";

@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication
 public class ImageappApplication {
 
+    public static String[] ALLOWED_EXTENSIONS = new String[] { "png", "jpg", "bmp", "webp" };
+
     public static void main(String[] args) {
         SpringApplication.run(ImageappApplication.class, args);
     }
