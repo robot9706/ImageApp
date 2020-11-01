@@ -1,6 +1,8 @@
 package com.robot9706.imageapp.service;
 
 import com.auth0.jwt.interfaces.Claim;
+import com.robot9706.imageapp.ImageappApplication;
+import com.robot9706.imageapp.SecurityHelper;
 import com.robot9706.imageapp.dto.AppUser;
 import com.robot9706.imageapp.repository.UserMongoRepository;
 import org.bson.types.ObjectId;
@@ -30,6 +32,17 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public static List<String> getDefaultUserRoles() {
+        List<String> extRoles = new ArrayList<>();
+        for (String ext : ImageappApplication.ALLOWED_EXTENSIONS) {
+            extRoles.add(SecurityHelper.extensionToRole(ext));
+        }
+
+        extRoles.add("USER");
+
+        return extRoles;
+    }
 
     @Override
     public UserDetails loadUserByUsername(final String s) throws UsernameNotFoundException {

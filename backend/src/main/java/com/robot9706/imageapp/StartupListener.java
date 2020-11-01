@@ -38,17 +38,10 @@ public class StartupListener implements ApplicationListener<ApplicationReadyEven
 
         // User user
         if (userService.findUserByUserName("user") == null) {
-            List<String> extRoles = new ArrayList<>();
-            for (String ext : ImageappApplication.ALLOWED_EXTENSIONS) {
-                extRoles.add(SecurityHelper.extensionToRole(ext));
-            }
-
-            extRoles.add("USER");
-
             AppUser userUser = new AppUser();
             userUser.setUsername("user");
             userUser.setPassword("user");
-            userUser.setRoles(extRoles);
+            userUser.setRoles(UserService.getDefaultUserRoles());
             userService.saveNewUser(userUser);
         }
 

@@ -28,7 +28,9 @@ public class UserController {
             return new ResponseEntity("User already exists!", HttpStatus.FORBIDDEN);
         }
 
-        userService.saveNewUser(new AppUser(userDTO));
+        AppUser newUser = new AppUser(userDTO);
+        newUser.setRoles(UserService.getDefaultUserRoles());
+        userService.saveNewUser(newUser);
 
         return new ResponseEntity(HttpStatus.OK);
     }
