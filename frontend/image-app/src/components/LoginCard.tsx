@@ -92,7 +92,7 @@ class LoginCard extends React.Component<ActualProps, State> {
                     username: this.state.inputUsername,
                     password: this.state.inputPassword
                 }).then(((loginResult: any) => {
-                    if ((loginResult.ok !== undefined && !loginResult.ok) || loginResult.authorization === undefined) {
+                    if (!loginResult.ok || loginResult.headers.authorization === undefined) {
                         this.setState({
                             loading: false,
                             errorText: "Hibás adatok!"
@@ -101,8 +101,8 @@ class LoginCard extends React.Component<ActualProps, State> {
                         return;
                     }
     
-                    apiGetUserInfo(loginResult.authorization).then(((userInfo: any) => {
-                        if (loginResult.ok !== undefined && !loginResult.ok) {
+                    apiGetUserInfo(loginResult.headers.authorization).then(((userInfo: any) => {
+                        if (!userInfo.ok) {
                             this.setState({
                                 loading: false,
                                 errorText: "Hibás adatok!"
@@ -111,11 +111,11 @@ class LoginCard extends React.Component<ActualProps, State> {
                             return;
                         }
     
-                        this.props.onLogin(userInfo.name, loginResult.authorization, userInfo.admin);
-    
                         this.setState({
                             loading: false,
                             errorText: ""
+                        }, () => {
+                            this.props.onLogin(userInfo.data.name, loginResult.headers.authorization, userInfo.data.admin);
                         });
                     }).bind(this));
                 }).bind(this));

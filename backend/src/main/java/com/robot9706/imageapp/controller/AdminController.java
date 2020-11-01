@@ -24,6 +24,12 @@ public class AdminController {
     private UserService userService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/allExtensions")
+    public String[] getExtensions() {
+        return ImageappApplication.ALLOWED_EXTENSIONS;
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/allUsers")
     public List<UserManageDTO> getUsers() {
         return userService.getAllUsers().stream().map(UserManageDTO::new).collect(Collectors.toList());

@@ -47,10 +47,8 @@ public class StartupListener implements ApplicationListener<ApplicationReadyEven
 
         // Content
         if (entryRepository.findByName(".") == null) {
-            ObjectId root = createContentEntry(".", null,true, null);
-
             {
-                ObjectId folder = createContentEntry("test_folder", null, true, root);
+                ObjectId folder = createContentEntry("test_folder", null, true, null);
                 createContentEntry("img.png", "png", false, folder);
                 createContentEntry("img.jpg", "jpg", false, folder);
                 createContentEntry("img.bmp", "bmp", false, folder);
@@ -58,7 +56,7 @@ public class StartupListener implements ApplicationListener<ApplicationReadyEven
             }
 
             {
-                ObjectId folder = createContentEntry("memes", null, true, root);
+                ObjectId folder = createContentEntry("memes", null, true, null);
                 createContentEntry("meme.png", "png", false, folder);
                 createContentEntry("meme.jpg", "jpg", false, folder);
                 createContentEntry("meme.bmp", "bmp", false, folder);

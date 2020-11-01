@@ -10,10 +10,13 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import LogOutIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
+import { history } from '../App';
+
 const mapStateToProps = (store: any) => {
     return {
         isLoggedIn: store.user.token !== null,
-        username: store.user.name
+        username: store.user.name,
+        isAdmin: store.user.admin
     };
 };
 
@@ -35,25 +38,49 @@ const LogoutButton = styled.div`{
     margin-left: 0.5rem;
 }`;
 
+const MarginButton = styled.div`{
+    margin-right: 1rem;
+}`;
+
+const LogoText = styled(Typography)`{
+    cursor: pointer;
+}`;
+
+const LoginWrapper = styled.div`{
+    flex: 0 0 auto;
+}`;
+
 type ActualProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 class AppHeader extends React.Component<ActualProps> {
     constructor(props: any) {
         super(props);
     }
 
+    handleAdminMenu() {
+        history.push("/admin");
+    }
+
+    handleLogout() {
+        this.props.logout();
+        history.push("/");
+    }
+
     render() {
         return (
-            <div>
+            <LoginWrapper>
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography variant="h6" style={{ flexGrow: 1 }}>Image App</Typography>
+                        <LogoText variant="h6" style={{ flexGrow: 1 }} onClick={() => {
+                            history.push("/");
+                        }}>Image App</LogoText>
                         {
                             this.props.isLoggedIn ? (
                                 <ActionsContainer>
+                                    {
+                                        this.props.isAdmin ? <MarginButton><Button variant="contained" onClick={this.handleAdminMenu.bind(this)}>Admin</Button></MarginButton> : null
+                                    }
                                     <Typography variant="h6">{this.props.username}</Typography>
-                                    <LogoutButton onClick={(() => {
-                                        this.props.logout();
-                                    }).bind(this)}>
+                                    <LogoutButton onClick={this.handleLogout.bind(this)}>
                                         <LogOutIcon />
                                     </LogoutButton>
                                 </ActionsContainer>
@@ -61,7 +88,7 @@ class AppHeader extends React.Component<ActualProps> {
                         }
                     </Toolbar>
                 </AppBar>
-            </div>
+            </LoginWrapper>
         );
     }
 };

@@ -1,14 +1,17 @@
-import { Store } from '@material-ui/icons';
 import React from 'react';
 
 import { Provider } from 'react-redux'
 import { store } from './redux/store';
+import { createBrowserHistory } from 'history';
 
-import { BrowserRouter, Switch, Redirect, Route } from "react-router-dom";
+import { Router, Switch, Redirect, Route } from "react-router-dom";
 import styled from "styled-components";
 
 import AppHeader from './components/AppHeader';
 import MainPage from './routes/MainPage';
+import AdminPage from './routes/AdminPage';
+
+export const history = createBrowserHistory();
 
 const NoMatch = () => <Redirect to="/" />
 
@@ -27,13 +30,14 @@ export default class App extends React.Component {
     render() {
         return <Provider store={store}>
             <PageWrapper>
-                <BrowserRouter basename="/">
+                <Router history={history}>
                     <AppHeader />
                     <Switch>
                         <Route exact path={"/"} component={MainPage} />
+                        <Route exact path={"/admin"} component={AdminPage} />
                         <Route exact component={NoMatch} />
                     </Switch>
-                </BrowserRouter>
+                </Router>
             </PageWrapper>
         </Provider>;
     }
