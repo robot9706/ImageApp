@@ -12,4 +12,6 @@ public interface EntryMongoRepository extends MongoRepository<EntryDTO, Long> {
     List<EntryDTO> filter(List<String> allowedFileExtensions, ObjectId parentId);
 
     EntryDTO findByName(String name);
+
+    EntryDTO findById(String id);
 }

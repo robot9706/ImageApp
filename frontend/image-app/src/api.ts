@@ -43,7 +43,6 @@ export interface Entry {
     name: string;
     extension: string;
     directory: boolean;
-    contentId: string;
 }
 
 const createHeaders = (token2?: string) => {
@@ -105,4 +104,10 @@ export const apiGetContent = (fromID: string): Promise<any> => {
     const params = (fromID == null ? "" : `?pid=${encodeURIComponent(fromID)}`);
 
     return apiGet(`/content/byParentId${params}`).then(dataHandler).catch(errorHandler);
+};
+
+export const apiGetImageAddress = (entry: Entry): string => {
+    const token = store.getState().user.token;
+
+    return `${process.env.REACT_APP_BACKEND}/content/data?id=${entry.id}&t=${token}`;
 };

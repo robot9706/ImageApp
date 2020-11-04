@@ -28,7 +28,7 @@ public class EntryDTO {
     private String extension;
     private boolean isDirectory;
 
-    @JsonSerialize(using= ToStringSerializer.class)
+    @JsonIgnore
     private ObjectId contentId;
 
     @JsonIgnore

@@ -10,6 +10,8 @@ import styled from "styled-components";
 import AppHeader from './components/AppHeader';
 import MainPage from './routes/MainPage';
 import AdminPage from './routes/AdminPage';
+import ImageViewDialog from './components/ImageViewDialog';
+import { Entry } from './api';
 
 export const history = createBrowserHistory();
 
@@ -37,6 +39,7 @@ export default class App extends React.Component {
                         <Route exact path={"/admin"} component={AdminPage} />
                         <Route exact component={NoMatch} />
                     </Switch>
+                    <ImageViewDialog />
                 </Router>
             </PageWrapper>
         </Provider>;

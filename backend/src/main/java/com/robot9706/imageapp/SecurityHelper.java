@@ -1,10 +1,13 @@
 package com.robot9706.imageapp;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.robot9706.imageapp.dto.AppUser;
+import com.robot9706.imageapp.dto.EntryDTO;
+import com.robot9706.imageapp.security.Consts;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,5 +47,20 @@ public class SecurityHelper {
             if (isRolePresent) break;
         }
         return isRolePresent;
+    }
+
+    public static boolean canAccess(AppUser user, EntryDTO entry) {
+        String ext = entry.getExtension();
+
+        List<String> roles = user.getRoles();
+
+        return (roles.contains("ADMIN") || roles.contains(extensionToRole(ext)));
+    }
+
+    public static String verifyToken(String token) {
+        return JWT.require(Algorithm.HMAC512(Consts.SECRET.getBytes()))
+                .build()
+                .verify(token.replace(Consts.TOKEN_PREFIX, ""))
+                .getSubject();
     }
 }

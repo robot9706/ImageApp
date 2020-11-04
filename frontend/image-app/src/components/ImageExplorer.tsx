@@ -6,7 +6,9 @@ import { connect } from "react-redux";
 import imageFolder from '../images/icon-folder.png';
 import imageFile from '../images/icon-file.png';
 import { apiGetContent, Entry } from '../api';
-import { Typography, Breadcrumbs } from '@material-ui/core';
+import { Typography, Breadcrumbs, IconButton } from '@material-ui/core';
+import { showImageDialog } from '../redux/imageDialog';
+import BackIcon from '@material-ui/icons/KeyboardArrowLeft';
 
 const mapStateToProps = (store: any) => {
     return {
@@ -15,6 +17,9 @@ const mapStateToProps = (store: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
+        showImageDialog: (entry: Entry) => {
+            dispatch(showImageDialog(entry));
+        }
     };
 };
 
@@ -34,12 +39,13 @@ const ExplorerPage = styled.div`{
 const BreadcrumpContainer = styled.div`{
     flex: 0 0 auto;
     padding: 0.5rem;
+    display: flex;
+    align-items: center;
 }`;
 
 const ContentContainer = styled.div`{
-    flex: 1 1 auto;
     display: flex;
-    flex-flow: row;
+    flex-wrap: wrap;
 }`;
 
 const EntryWrapper = styled.div`{
@@ -93,7 +99,7 @@ class ImageExplorer extends React.Component<ActualProps, State> {
                 this.fetchContent();
             });
         } else {
-
+            this.props.showImageDialog(entry);
         }
     }
 
@@ -103,8 +109,15 @@ class ImageExplorer extends React.Component<ActualProps, State> {
                 return;
             }
 
+            const sortFunction = (a: Entry, b: Entry) => {
+                if (a.name < b.name) return -1;
+                if (a.name > b.name) return 1;
+                return 0;
+            };
+
+            const entries = data.data as Entry[];
             this.setState({
-                entries: data.data as Entry[]
+                entries: [ ...entries.filter(x => x.directory).sort(sortFunction), ...entries.filter(x => !x.directory).sort(sortFunction) ]
             });
         })
     }
@@ -131,10 +144,24 @@ class ImageExplorer extends React.Component<ActualProps, State> {
         });
     }
 
+    handleOneUp() {
+        const history = this.state.history;
+        history.pop();
+        this.setState({
+            history: history,
+            currentID: history.length > 0 ? history[history.length - 1].id : ""
+        }, () => {
+            this.fetchContent();
+        });
+    }
+
     render() {
         return (
             <ExplorerPage>
                 <BreadcrumpContainer>
+                    <IconButton onClick={this.handleOneUp.bind(this)}>
+                        <BackIcon />
+                    </IconButton>
                     <Breadcrumbs aria-label="breadcrumb">
                         <HistoryLink color="textPrimary" onClick={this.handleRootClick.bind(this)}>Root</HistoryLink>;
                         {
