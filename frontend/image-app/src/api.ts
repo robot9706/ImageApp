@@ -111,3 +111,18 @@ export const apiGetImageAddress = (entry: Entry): string => {
 
     return `${process.env.REACT_APP_BACKEND}/content/data?id=${entry.id}&t=${token}`;
 };
+
+export const apiAdminCreateDirectory = (parentId: string, name: string): Promise<any> => {
+    return apiPost('/admin/createDirectory', { parentId: parentId, name: name }).then(successHandler).catch(errorHandler);
+};
+
+export const apiAdminCreateFile = (parentId: string, name: string, fullFilename: string, data: ArrayBuffer): Promise<any> => {
+    const formData = new FormData();
+    formData.append("file", new Blob([data]), fullFilename);
+
+    return apiPost(`/admin/createFile?parentId=${encodeURIComponent(parentId)}&name=${encodeURIComponent(name)}`, formData).then(successHandler).catch(errorHandler);
+};
+
+export const apiAdminDeleteEntry = (entryId: string): Promise<any> => {
+    return apiGet(`/admin/deleteEntry?entryId=${encodeURIComponent(entryId)}`).then(successHandler).catch(errorHandler);
+};

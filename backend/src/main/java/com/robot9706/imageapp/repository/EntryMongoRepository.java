@@ -13,5 +13,11 @@ public interface EntryMongoRepository extends MongoRepository<EntryDTO, Long> {
 
     EntryDTO findByName(String name);
 
+    EntryDTO findByNameAndParentId(String name, ObjectId parentId);
+
+    List<EntryDTO> findByParentId(ObjectId parentId);
+
     EntryDTO findById(String id);
+
+    EntryDTO findById(ObjectId id);
 }
