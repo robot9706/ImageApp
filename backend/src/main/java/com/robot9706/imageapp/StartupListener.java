@@ -53,67 +53,70 @@ public class StartupListener implements ApplicationListener<ApplicationReadyEven
 
         // Content
         if (entryRepository.findByName("test_folder") == null) {
-            ObjectId contentId = null;
-            try (InputStream placeholderImage = new ClassPathResource("images/placeholder.png").getInputStream()) {
-                contentId = gridFs.store(placeholderImage, "placeholder.png", "image/png");
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
             // test_folder
             {
                 ObjectId folder = createContentEntry("test_folder", null, true, null, null);
-                createContentEntry("img.png", "png", false, folder, contentId);
-                createContentEntry("img.jpg", "jpg", false, folder, contentId);
-                createContentEntry("img.bmp", "bmp", false, folder, contentId);
-                createContentEntry("img.webp", "webp", false, folder, contentId);
+                createContentEntry("img.png", "png", false, folder, getContent());
+                createContentEntry("img.jpg", "jpg", false, folder, getContent());
+                createContentEntry("img.bmp", "bmp", false, folder, getContent());
+                createContentEntry("img.webp", "webp", false, folder, getContent());
 
                 // only_png
                 {
                     ObjectId onlyFolder = createContentEntry("only_png", null, true, folder, null);
-                    createContentEntry("img1.png", "png", false, onlyFolder, contentId);
-                    createContentEntry("img2.png", "png", false, onlyFolder, contentId);
-                    createContentEntry("img3.png", "png", false, onlyFolder, contentId);
-                    createContentEntry("img4.png", "png", false, onlyFolder, contentId);
+                    createContentEntry("img1.png", "png", false, onlyFolder, getContent());
+                    createContentEntry("img2.png", "png", false, onlyFolder, getContent());
+                    createContentEntry("img3.png", "png", false, onlyFolder, getContent());
+                    createContentEntry("img4.png", "png", false, onlyFolder, getContent());
                 }
 
                 // only_jpg
                 {
                     ObjectId onlyFolder = createContentEntry("only_jpg", null, true, folder, null);
-                    createContentEntry("img1.jpg", "jpg", false, onlyFolder, contentId);
-                    createContentEntry("img2.jpg", "jpg", false, onlyFolder, contentId);
-                    createContentEntry("img3.jpg", "jpg", false, onlyFolder, contentId);
-                    createContentEntry("img4.jpg", "jpg", false, onlyFolder, contentId);
+                    createContentEntry("img1.jpg", "jpg", false, onlyFolder, getContent());
+                    createContentEntry("img2.jpg", "jpg", false, onlyFolder, getContent());
+                    createContentEntry("img3.jpg", "jpg", false, onlyFolder, getContent());
+                    createContentEntry("img4.jpg", "jpg", false, onlyFolder, getContent());
                 }
 
                 // only_bmp
                 {
                     ObjectId onlyFolder = createContentEntry("only_bmp", null, true, folder, null);
-                    createContentEntry("img1.bmp", "bmp", false, onlyFolder, contentId);
-                    createContentEntry("img2.bmp", "bmp", false, onlyFolder, contentId);
-                    createContentEntry("img3.bmp", "bmp", false, onlyFolder, contentId);
-                    createContentEntry("img4.bmp", "bmp", false, onlyFolder, contentId);
+                    createContentEntry("img1.bmp", "bmp", false, onlyFolder, getContent());
+                    createContentEntry("img2.bmp", "bmp", false, onlyFolder, getContent());
+                    createContentEntry("img3.bmp", "bmp", false, onlyFolder, getContent());
+                    createContentEntry("img4.bmp", "bmp", false, onlyFolder, getContent());
                 }
 
                 // only_webp
                 {
                     ObjectId onlyFolder = createContentEntry("only_webp", null, true, folder, null);
-                    createContentEntry("img1.webp", "webp", false, onlyFolder, contentId);
-                    createContentEntry("img2.webp", "webp", false, onlyFolder, contentId);
-                    createContentEntry("img3.webp", "webp", false, onlyFolder, contentId);
-                    createContentEntry("img4.webp", "webp", false, onlyFolder, contentId);
+                    createContentEntry("img1.webp", "webp", false, onlyFolder, getContent());
+                    createContentEntry("img2.webp", "webp", false, onlyFolder, getContent());
+                    createContentEntry("img3.webp", "webp", false, onlyFolder, getContent());
+                    createContentEntry("img4.webp", "webp", false, onlyFolder, getContent());
                 }
             }
 
             // memes
             {
                 ObjectId folder = createContentEntry("memes", null, true, null, null);
-                createContentEntry("meme.png", "png", false, folder, contentId);
-                createContentEntry("meme.jpg", "jpg", false, folder, contentId);
-                createContentEntry("meme.bmp", "bmp", false, folder, contentId);
-                createContentEntry("meme.webp", "webp", false, folder, contentId);
+                createContentEntry("meme.png", "png", false, folder, getContent());
+                createContentEntry("meme.jpg", "jpg", false, folder, getContent());
+                createContentEntry("meme.bmp", "bmp", false, folder, getContent());
+                createContentEntry("meme.webp", "webp", false, folder, getContent());
             }
         }
+    }
+
+    private ObjectId getContent() {
+        ObjectId contentId = null;
+        try (InputStream placeholderImage = new ClassPathResource("images/placeholder.png").getInputStream()) {
+            contentId = gridFs.store(placeholderImage, "placeholder.png", "image/png");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return contentId;
     }
 
     private ObjectId createContentEntry(String name, String ext, boolean isDirectory, ObjectId parent, ObjectId contentId) {

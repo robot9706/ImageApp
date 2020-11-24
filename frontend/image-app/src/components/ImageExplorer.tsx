@@ -202,8 +202,8 @@ class ImageExplorer extends React.Component<ActualProps, State> {
                     <Breadcrumbs aria-label="breadcrumb">
                         <HistoryLink color="textPrimary" onClick={this.handleRootClick.bind(this)}>Root</HistoryLink>;
                         {
-                            this.state.history.map((historyItem: Entry) => {
-                                return <HistoryLink color="textPrimary" onClick={(() => { this.handleHistoryClick(historyItem); }).bind(this)}>{historyItem.name}</HistoryLink>;
+                            this.state.history.map((historyItem: Entry, index: number) => {
+                                return <HistoryLink key={index} color="textPrimary" onClick={(() => { this.handleHistoryClick(historyItem); }).bind(this)}>{historyItem.name}</HistoryLink>;
                             })
                         }
                         <Typography color="textPrimary"></Typography>
